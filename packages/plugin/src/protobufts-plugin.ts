@@ -11,6 +11,7 @@ import {Options, parseOptions} from "./options";
 import {ServiceServerGeneratorGrpc} from "./code-gen/service-server-generator-grpc";
 import {CommentGenerator} from "./code-gen/comment-generator";
 import {MessageInterfaceGenerator} from "./code-gen/message-interface-generator";
+import {MessageClassGenerator} from "./code-gen/message-class-generator";
 import {MessageTypeGenerator} from "./code-gen/message-type-generator";
 import {EnumGenerator} from "./code-gen/enum-generator";
 import {ServiceTypeGenerator} from "./code-gen/service-type-generator";
@@ -49,6 +50,7 @@ export class ProtobuftsPlugin extends PluginBaseProtobufES {
             comments = new CommentGenerator(),
             interpreter = new Interpreter(registry, options),
             genMessageInterface = new MessageInterfaceGenerator(symbols, imports, comments, interpreter, options),
+            genClass = new MessageClassGenerator(symbols, imports, comments, interpreter, options),
             genEnum = new EnumGenerator(symbols, imports, comments, interpreter),
             genMessageType = new MessageTypeGenerator(registry, imports, comments, interpreter, options),
             genServiceType = new ServiceTypeGenerator(symbols, imports, comments, interpreter, options),
@@ -95,6 +97,9 @@ export class ProtobuftsPlugin extends PluginBaseProtobufES {
                         break;
                     case "message":
                         genMessageInterface.registerSymbols(outMain, desc);
+                        if (options.generateMessageClasses) {
+                            genClass.registerSymbols(outMain, desc);
+                        }
                         break;
                     case "service":
                         genServiceType.registerSymbols(outMain, desc);
@@ -111,6 +116,9 @@ export class ProtobuftsPlugin extends PluginBaseProtobufES {
                 switch (desc.kind) {
                     case "message":
                         genMessageInterface.generateMessageInterface(outMain, desc)
+                        if (options.generateMessageClasses) {
+                            genClass.generateMessageClass(outMain, desc);
+                        }
                         break;
                     case "enum":
                         genEnum.generateEnum(outMain, desc);

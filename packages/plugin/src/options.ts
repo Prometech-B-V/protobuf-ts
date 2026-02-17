@@ -89,6 +89,10 @@ const parseParameter = createOptionParser({
         description: "Adds the suffix `_pb` to the names of all generated files. This will become the \n" +
             "default behaviour in the next major release.",
     },
+    generate_message_classes: {
+        kind: "flag",
+        description: "Generate a concrete class for each message with a constructor using parameter properties.",
+    },
 
     // output types
     output_typescript: {
@@ -254,6 +258,7 @@ export interface Options {
     readonly transpileModule: ts.ModuleKind,
     readonly forceDisableServices: boolean;
     readonly addPbSuffix: boolean;
+    readonly generateMessageClasses: boolean;
     getOptimizeMode(file: DescFile): FileOptions_OptimizeMode;
     getClientStyles(descriptor: DescService): ClientStyle[];
     getServerStyles(descriptor: DescService): ServerStyle[];
@@ -287,6 +292,7 @@ export function parseOptions(
         transpileModule: ts.ModuleKind.ES2015,
         forceDisableServices: false,
         addPbSuffix: false,
+        generateMessageClasses: false,
         getOptimizeMode(file: DescFile): FileOptions_OptimizeMode {
             if (this.forcedOptimizeMode !== undefined) {
                 return this.forcedOptimizeMode;
@@ -405,6 +411,9 @@ export function parseOptions(
     if (params.force_disable_services) {
       o.forceDisableServices = true;
     }
+    if (params.generate_message_classes) {
+        o.generateMessageClasses = true;
+    }
     if (params.output_javascript) {
         o.transpileTarget = ts.ScriptTarget.ES2020;
     }
@@ -431,4 +440,3 @@ export function parseOptions(
     }
     return o;
 }
-
