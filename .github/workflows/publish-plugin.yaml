@@ -26,7 +26,7 @@ jobs:
           cache: npm
           registry-url: https://npm.pkg.github.com
       - run: npm ci
-      - run: npm run build --workspace packages/plugin
+      - run: npx turbo run build
       - run: npm test --workspace packages/plugin
       - run: npm publish --workspace packages/plugin
         env:
