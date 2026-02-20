@@ -1,5 +1,5 @@
 {
-  "name": "@protobuf-ts/plugin",
+  "name": "@prometech-b-v/protobuf-plugin",
   "version": "2.11.1",
   "description": "The protocol buffer compiler plugin \"protobuf-ts\" generates TypeScript, gRPC-web, Twirp, and more.",
   "scripts": {
@@ -34,7 +34,8 @@
     "directory": "packages/plugin"
   },
   "publishConfig": {
-    "access": "public"
+    "access": "public",
+    "registry": "https://npm.pkg.github.com"
   },
   "devDependencies": {
     "@bufbuild/buf": "^1.53.0",
